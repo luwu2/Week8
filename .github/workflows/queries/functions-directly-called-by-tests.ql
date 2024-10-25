@@ -47,8 +47,7 @@ predicate isExportedFunction(Function f) {
 * Holds if the given function is not greater than 10 lines.
 */ 
 predicate isTooLong(Function f) {
-  exists(MethodDefinition md | 
-  md.getNumLines() <= 10)
+  exists(f.getNumLines() <= 10)
 }
 
 /**
@@ -56,7 +55,7 @@ predicate isTooLong(Function f) {
 */
 predicate isPublicNoTests(Function f) {
   exists(MethodDefinition md |
-  md.isPublic() and !md.isTest())
+  md.isPublic() and !f.isTest())
 }
 
 from Function test, Function callee
