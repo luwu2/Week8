@@ -28,6 +28,37 @@ predicate calls(Function caller, Function callee) {
   )
 }
 
+/**
+ * Holds if the given function is a public method of a class.
+ */
+predicate isPublicMethod(Function f) {
+  exists(MethodDefinition md | md.isPublic() and md.getBody() = f)
+}
+
+/**
+* Holds if the given function is exported from a module.
+*/
+predicate isExportedFunction(Function f) {
+  exists(Module m | m.getAnExportedValue(_).getAFunctionValue().getFunction() = f) and
+  not f.inExternsFile()
+}
+
+/**
+* Holds if the given function is not greater than 10 lines.
+*/ 
+predicate isTooLong(Function f) {
+  exists(MethodDefinition md | 
+  md.getNumLines() <= 10)
+}
+
+/**
+* Finds all public methods not called by tests.
+*/
+predicate isPublicNoTests(Function f) {
+  exists(MethodDefinition md |
+  md.isPublic() and !md.isTest())
+}
+
 from Function test, Function callee
 where isTest(test) and
       calls(test, callee)
